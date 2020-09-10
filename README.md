@@ -7,10 +7,10 @@
 
 ## Library List
 
-#### pl7211 meter ic drive(1v1)
-#### pl7413 meter ic drive(1v3)
+#### pl7211 meter ic drive 1v1
+#### pl7413 meter ic drive 1v3
 #### pt6959 lcd drive
-#### external flash SPI drive(開發中)
+#### w25qxx external flash SPI drive
 #### W/R storage flash
 #### OTA(規劃中)
 
