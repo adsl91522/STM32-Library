@@ -16,7 +16,6 @@
 #define STORAGE_SIZE		4
 #define PAGES				1	//1page=1KBytes
 
-
 /* head */
 #define HEAD				0x7E
 
@@ -32,7 +31,6 @@
 #define ID_LED4				0x08
 #define ID_RELAY_SETUP		0x09
 #define ID_LIGHT_SETUP		0x0A
-
 
 
 /*==================================*/

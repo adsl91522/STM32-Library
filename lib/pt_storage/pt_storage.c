@@ -1,5 +1,5 @@
 #include "stm32f0xx_hal.h"
-#include "pt_storage_flash.h"
+#include "pt_storage.h"
 
 #define DEBUG				0
 
@@ -124,7 +124,7 @@ void erase_storage(void)
 
 	f.TypeErase = FLASH_TYPEERASE_PAGES;
 	f.PageAddress = STORAGE_START;
-	f.NbPages = PAGES * STORAGE_SIZE;
+	f.NbPages = PAGES / STORAGE_SIZE;
 
 	HAL_FLASHEx_Erase(&f, &PageError);
 #if(DEBUG == 1)
