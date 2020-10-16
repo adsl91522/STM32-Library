@@ -23,11 +23,11 @@ struct PT6959{
 	uint8_t CMD4;
 }pt6959;
 
-uint8_t pt6961_addr_buf[14];
+uint8_t pt6959_addr_buf[14];
 
 
 #if(PT6959_MODE == SW_MODE)
-static void pt6961_send_byte(uint8_t byte)
+static void pt6959_send_byte(uint8_t byte)
 {
 #if (PT6959_DEBUG == 1)
 	printf("pt6959 send byte %02X\r\n", byte);
@@ -168,7 +168,7 @@ uint8_t char2segment(char c)
     return data;
 }
 
-/* pt6961 update sequence: CMD2 -> CMD3 -> CMD1 -> CMD4
+/* pt6959 update sequence: CMD2 -> CMD3 -> CMD1 -> CMD4
  *
  * command 1:DISPLAY MODE SETTING COMMANDS
  *  MSB						     LSB
@@ -213,7 +213,7 @@ uint8_t char2segment(char c)
  *	 	1: Display On
  * ========================================
  */
-static void pt6961_update(void)
+static void pt6959_update(void)
 {
 #if (PT6959_DEBUG == 1)
 	printf("pt6959 update\r\n");
@@ -223,19 +223,19 @@ static void pt6961_update(void)
 #if (PT6959_MODE == HW_MODE)
 	HAL_SPI_Transmit(&PT6959_SPI, &pt6959.CMD2, 1, PT6959_TIMEOUT_VALUE);
 #else
-	pt6961_send_byte(pt6959.CMD2);
+	pt6959_send_byte(pt6959.CMD2);
 #endif
 	PL6959_CS(1);
 
 	PL6959_CS(0);
 #if (PT6959_MODE == HW_MODE)
 	HAL_SPI_Transmit(&PT6959_SPI, &pt6959.CMD3, 1, PT6959_TIMEOUT_VALUE);
-	HAL_SPI_Transmit(&PT6959_SPI, pt6961_addr_buf, 14, PT6959_TIMEOUT_VALUE);
+	HAL_SPI_Transmit(&PT6959_SPI, pt6959_addr_buf, 14, PT6959_TIMEOUT_VALUE);
 #else
-	pt6961_send_byte(pt6959.CMD3);
+	pt6959_send_byte(pt6959.CMD3);
 	for(int i=0; i<14; i++)
 	{
-		pt6961_send_byte(pt6961_addr_buf[i]);
+		pt6959_send_byte(pt6959_addr_buf[i]);
 	}
 #endif
 	PL6959_CS(1);
@@ -244,7 +244,7 @@ static void pt6961_update(void)
 #if (PT6959_MODE == HW_MODE)
 	HAL_SPI_Transmit(&PT6959_SPI, &pt6959.CMD1, 1, PT6959_TIMEOUT_VALUE);
 #else
-	pt6961_send_byte(pt6959.CMD1);
+	pt6959_send_byte(pt6959.CMD1);
 #endif
 	PL6959_CS(1);
 
@@ -252,7 +252,7 @@ static void pt6961_update(void)
 #if (PT6959_MODE == HW_MODE)
 	HAL_SPI_Transmit(&PT6959_SPI, &pt6959.CMD4, 1, PT6959_TIMEOUT_VALUE);
 #else
-	pt6961_send_byte(pt6959.CMD4);
+	pt6959_send_byte(pt6959.CMD4);
 #endif
 	PL6959_CS(1);
 }
@@ -265,9 +265,9 @@ void pt6959_set_address(uint8_t digits, uint8_t segments)
 	printf("pt6959 set address, digits %02x, segments %02x\r\n", digits, segments);
 #endif
 
-	pt6961_addr_buf[digits]=segments;
+	pt6959_addr_buf[digits]=segments;
 
-	pt6961_update();
+	pt6959_update();
 }
 
 void pt6959_set_dimmer(uint8_t data)
@@ -279,7 +279,7 @@ void pt6959_set_dimmer(uint8_t data)
 
 	pt6959.CMD4=data;
 
-	pt6961_update();
+	pt6959_update();
 }
 
 void pt6959_init(void)
@@ -302,5 +302,5 @@ void pt6959_init(void)
 	pt6959.CMD3=0xC0;
 	pt6959.CMD4=0x8F;
 
-	pt6961_update();
+	pt6959_update();
 }

@@ -5,37 +5,37 @@
 /*
  *   file  : pt_storage_flash.h
  *   Author: Bill
- *   Ver   : 1.0.0
- *   Date  : 2020/09/10
+ *   Ver   : 1.1.0
+ *   Date  : 2020/09/21
  *   Brief : W/R storage flash
  */
 
 
-#define STORAGE_START		(uint32_t)0x0800E800
-#define STORAGE_END			(uint32_t)0x0800F7FC
-#define STORAGE_SIZE		4
-#define PAGES				1	//1page=1KBytes
+#define STORAGE_START		(uint32_t)0x0801E000
+#define STORAGE_END			(uint32_t)0x0801F000
 
-/* head */
-#define HEAD				0x7E
+#define STORAGE_SIZE		4096
 
-/* key id */
-#define APP_CRC				0x00
-#define ID_RELAY1			0x01
-#define ID_RELAY2			0x02
-#define ID_RELAY3			0x03
-#define ID_RELAY4			0x04
-#define ID_LED1				0x05
-#define ID_LED2				0x06
-#define ID_LED3				0x07
-#define ID_LED4				0x08
-#define ID_RELAY_SETUP		0x09
-#define ID_LIGHT_SETUP		0x0A
+#define PAGES				2048	//1page=2KBytes
 
+
+/* non volatile memory key id */
+struct NVS_KEY_ID{
+	uint8_t f_head;
+	uint8_t s_head;
+	uint32_t app_crc;
+	uint8_t id_relay1;
+	uint8_t id_relay2;
+	uint8_t id_relay3;
+	uint8_t id_relay4;
+	uint8_t relay_setup;
+	uint8_t light_setup;
+	uint16_t chk_sum;
+}nvs_key_id;
 
 /*==================================*/
 /* data format
- * 7E 00 00 XX(key id), value(4byte) */
+ * 7D 7E key_id_0, key_id_1, key_id_2, key_id_3..., last 2 byte(chk_sum) 0x00 */
 /*==================================*/
 
 
@@ -45,14 +45,14 @@
   * 		value
   * @retval none
   */
-void write_storage(uint8_t key_id, uint32_t value);
+void write_storage(void);
 
 /**
   * @brief  read flash storage, memory data follow data format
   * @param  key_id
   * @retval value
   */
-uint32_t read_storage(uint8_t key_id);
+void read_storage(void);
 
 /**
   * @brief  erase storage(follow your defined STORAGE address and pages)
